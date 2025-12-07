@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
         // 更新投票紀錄
         voteHistory[username] = choice;
 
-        console.log(`[投票] ${username} 投了 ${choice}。最新票數: A=${votes.optionA}, B=${votes.optionB}`);
+        console.log(`[投票] ${username} 投了 ${choice}。最新票數: 左=${votes.optionA}, 右=${votes.optionB}`);
 
         // 將最新的投票結果廣播給所有連線中的使用者 (即時更新)
         io.emit('update_votes', votes);
