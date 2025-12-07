@@ -37,10 +37,10 @@ io.on('connection', (socket) => {
         socket.username = username; 
     });
         
-    console.log('一個使用者進來了。'); // 修正：使用中性用語
+    console.log('一個Gay進來了。'); // 修正：使用中性用語
 
     // 【新增】監聽 'reset_votes' 事件
-    socket.on('reset_votes', () => {
+    socket.on('投了_votes', () => {
         // 重設投票資料
         votes = {
             optionA: 0,
@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log('一個使用者跑了。'); // 修正：使用中性用語
+        console.log('一個Gay跑了。'); 
     });
 });
 

@@ -19,15 +19,15 @@
 
     <div id="login">
         <h2>👋 歡迎！</h2>
-        <input type="text" id="username_input" placeholder="請輸入你的名字" required>
+        <input type="text" id="username_input" placeholder="輸入你的名字" required>
         <button class="vote-btn" onclick="login()">進入投票</button>
     </div>
 
     <div id="main_app" style="display: none;">
         
         <h2>📊 即時投票結果</h2>
-        <p>選項一 (A)：<strong id="vote_a_count">0</strong> 票</p>
-        <p>選項二 (B)：<strong id="vote_b_count">0</strong> 票</p>
+        <p>左 (A)：<strong id="vote_a_count">0</strong> 票</p>
+        <p>右 (B)：<strong id="vote_b_count">0</strong> 票</p>
         
         <h3>🗳️ 進行投票</h3>
         <button class="vote-btn" onclick="submitVote('optionA')">✅ 投給左</button>
