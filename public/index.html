@@ -11,7 +11,7 @@
         input[type="text"], .vote-btn { padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-right: 10px; }
         .vote-btn { background-color: #007bff; color: white; cursor: pointer; border: none; transition: background-color 0.3s; }
         .vote-btn:hover { background-color: #0056b3; }
-        #chatbox { height: 200px; border: 1px solid #ddd; overflow-y: scroll; padding: 10px; margin-top: 10px; background-color: #e9ecef; border-radius: 4px; }
+        #chatbox { height: 1000px; border: 1px solid #ddd; overflow-y: scroll; padding: 10px; margin-top: 10px; background-color: #e9ecef; border-radius: 4px; }
         .chat-message { margin-bottom: 5px; font-size: 0.9em; }
     </style>
 </head>
@@ -30,9 +30,10 @@
         <p>選項二 (B)：<strong id="vote_b_count">0</strong> 票</p>
         
         <h3>🗳️ 進行投票</h3>
-        <button class="vote-btn" onclick="submitVote('optionA')">✅ 投給選項一</button>
-        <button class="vote-btn" onclick="submitVote('optionB')">✅ 投給選項二</button>
-
+        <button class="vote-btn" onclick="submitVote('optionA')">✅ 投給左</button>
+        <button class="vote-btn" onclick="submitVote('optionB')">✅ 投給右</button>
+        <button id="reset_btn" onclick="resetVotes()" style="background-color: #dc3545; margin-left: 20px;">🔄 重設投票</button>
+        
         <h3>💬 投票記錄 (聊天室)</h3>
         <div id="chatbox"></div>
     </div>
@@ -51,19 +52,30 @@
                 document.getElementById('login').style.display = 'none';
                 document.getElementById('main_app').style.display = 'block';
                 addChatMessage(`👉 系統：${username} 已加入投票。`);
+
+                // **[修正]** 發送名字給伺服器，以便伺服器記錄誰連線
+                socket.emit('set_username', username);
             } else {
-                alert('請輸入有效名字！');
+                alert('輸入有效名字好嗎?D能');
             }
         }
 
         // 發送投票給伺服器
         function submitVote(choice) {
             if (!currentUsername) {
-                alert('請先登入！');
+                alert('不會登入嗎？');
                 return;
             }
             // 使用 socket.emit() 將資料發送給後端
             socket.emit('submit_vote', { username: currentUsername, choice: choice });
+        }
+
+        // **[新增]** 發送重設請求給伺服器
+        function resetVotes() {
+            if (confirm("確定要重設所有投票結果嗎？這將清空所有紀錄！")) {
+                // 發送 'reset_votes' 事件給伺服器
+                socket.emit('reset_votes');
+            }
         }
 
         // 更新介面上的票數顯示
