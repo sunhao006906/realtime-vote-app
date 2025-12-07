@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>即時聊天投票系統</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f7f6; }
+        #login, #main_app { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        h2, h3 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 20px; }
+        input[type="text"], .vote-btn { padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-right: 10px; }
+        .vote-btn { background-color: #007bff; color: white; cursor: pointer; border: none; transition: background-color 0.3s; }
+        .vote-btn:hover { background-color: #0056b3; }
+        #chatbox { height: 200px; border: 1px solid #ddd; overflow-y: scroll; padding: 10px; margin-top: 10px; background-color: #e9ecef; border-radius: 4px; }
+        .chat-message { margin-bottom: 5px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <div id="login">
+        <h2>👋 歡迎！</h2>
+        <input type="text" id="username_input" placeholder="請輸入你的名字" required>
+        <button class="vote-btn" onclick="login()">進入投票</button>
+    </div>
+
+    <div id="main_app" style="display: none;">
+        
+        <h2>📊 即時投票結果</h2>
+        <p>選項一 (A)：<strong id="vote_a_count">0</strong> 票</p>
+        <p>選項二 (B)：<strong id="vote_b_count">0</strong> 票</p>
+        
+        <h3>🗳️ 進行投票</h3>
+        <button class="vote-btn" onclick="submitVote('optionA')">✅ 投給選項一</button>
+        <button class="vote-btn" onclick="submitVote('optionB')">✅ 投給選項二</button>
+
+        <h3>💬 投票記錄 (聊天室)</h3>
+        <div id="chatbox"></div>
+    </div>
+
+    <script>
+        // 1. 連線到伺服器
+        const socket = io();
+        let currentUsername = '';
+
+        // 處理登入：隱藏登入介面，顯示主介面
+        function login() {
+            const input = document.getElementById('username_input');
+            const username = input.value.trim();
+            if (username) {
+                currentUsername = username;
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('main_app').style.display = 'block';
+                addChatMessage(`👉 系統：${username} 已加入投票。`);
+            } else {
+                alert('請輸入有效名字！');
+            }
+        }
+
+        // 發送投票給伺服器
+        function submitVote(choice) {
+            if (!currentUsername) {
+                alert('請先登入！');
+                return;
+            }
+            // 使用 socket.emit() 將資料發送給後端
+            socket.emit('submit_vote', { username: currentUsername, choice: choice });
+        }
+
+        // 更新介面上的票數顯示
+        function updateVoteDisplay(votes) {
+            document.getElementById('vote_a_count').textContent = votes.optionA;
+            document.getElementById('vote_b_count').textContent = votes.optionB;
+        }
+
+        // 在聊天框中新增一條訊息
+        function addChatMessage(message) {
+            const chatbox = document.getElementById('chatbox');
+            const p = document.createElement('p');
+            p.className = 'chat-message';
+            p.textContent = message;
+            chatbox.appendChild(p);
+            // 讓聊天框自動捲動到最新訊息
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        // --- 接收來自伺服器的即時事件 ---
+        
+        // 接收初始投票結果 (剛連線時)
+        socket.on('current_votes', (votes) => {
+            updateVoteDisplay(votes);
+        });
+
+        // 接收投票更新 (有人投票時)
+        socket.on('update_votes', (votes) => {
+            updateVoteDisplay(votes);
+        });
+
+        // 接收聊天/投票訊息
+        socket.on('chat_message', (message) => {
+            addChatMessage(message);
+        });
+    </script>
+</body>
+</html>
