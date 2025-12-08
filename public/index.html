@@ -26,15 +26,15 @@
     <div id="main_app" style="display: none;">
         
         <h2>📊 即時投票結果</h2>
-        <p>左 (A)：<strong id="vote_a_count">0</strong> 票</p>
-        <p>右 (B)：<strong id="vote_b_count">0</strong> 票</p>
+        <p>左 ：<strong id="vote_a_count">0</strong> 票</p>
+        <p>右 ：<strong id="vote_b_count">0</strong> 票</p>
         
         <h3>🗳️ 進行投票</h3>
-        <button class="vote-btn" onclick="submitVote('optionA')">✅ 投給左</button>
-        <button class="vote-btn" onclick="submitVote('optionB')">✅ 投給右</button>
+        <button class="vote-btn" onclick="submitVote('optionA')">✅ 投左</button>
+        <button class="vote-btn" onclick="submitVote('optionB')">✅ 投右</button>
         <button id="reset_btn" onclick="resetVotes()" style="background-color: #dc3545; margin-left: 20px;">🔄 重設投票</button>
         
-        <h3>💬 投票記錄 (聊天室)</h3>
+        <h3>💬 投票記錄 </h3>
         <div id="chatbox"></div>
     </div>
 
@@ -51,7 +51,7 @@
                 currentUsername = username;
                 document.getElementById('login').style.display = 'none';
                 document.getElementById('main_app').style.display = 'block';
-                addChatMessage(`👉 系統：${username} 已加入投票。`);
+                addChatMessage(`👉 系統：${username} 這個臭甲已加入投票。`);
 
                 // **[修正]** 發送名字給伺服器，以便伺服器記錄誰連線
                 socket.emit('set_username', username);
@@ -72,7 +72,7 @@
 
         // **[新增]** 發送重設請求給伺服器
         function resetVotes() {
-            if (confirm("確定要重設所有投票結果嗎？這將清空所有紀錄！")) {
+            if (confirm("別她媽亂按，傻逼")) {
                 // 發送 'reset_votes' 事件給伺服器
                 socket.emit('reset_votes');
             }
