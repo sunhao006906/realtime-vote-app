@@ -5,13 +5,45 @@
     <title>即時聊天投票系統</title>
     <script src="/socket.io/socket.io.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f7f6; }
-        #login, #main_app { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            max-width: 900px; /* 增加最大寬度來容納兩側圖片 */
+            margin: 0 auto; 
+            padding: 20px; 
+            background-color: #f4f7f6; 
+            
+            /* 【核心修改】設定背景圖片 */
+            background-image: url('shiroSwimSuit.jpg'), url('shirobunnygirl.jpg');
+            
+            /* 設定圖片的位置：左上角，右下角 */
+            background-position: left top, right bottom; 
+            
+            /* 讓圖片不重複 */
+            background-repeat: no-repeat, no-repeat;
+            
+            /* 讓圖片固定在視窗，不隨捲動軸移動 (可選) */
+            background-attachment: fixed;
+            
+            /* 設定圖片尺寸，cover/contain 或具體像素值 */
+            background-size: 200px auto, 200px auto; 
+        }
+        
+        /* 調整主要內容區塊，確保它不被背景圖片遮擋 */
+        #login, #main_app { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* 增加陰影以區分背景 */
+            /* 確保主要內容位於中間 */
+            position: relative; 
+            z-index: 10; 
+        }
+        /* ... 其他現有樣式 ... */
         h2, h3 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 20px; }
         input[type="text"], .vote-btn { padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-right: 10px; }
         .vote-btn { background-color: #007bff; color: white; cursor: pointer; border: none; transition: background-color 0.3s; }
         .vote-btn:hover { background-color: #0056b3; }
-        #chatbox { height: 500px; border: 1px solid #ddd; overflow-y: scroll; padding: 10px; margin-top: 10px; background-color: #e9ecef; border-radius: 4px; }
+        #chatbox { height: 1000px; border: 1px solid #ddd; overflow-y: scroll; padding: 10px; margin-top: 10px; background-color: #e9ecef; border-radius: 4px; }
         .chat-message { margin-bottom: 5px; font-size: 0.9em; }
     </style>
 </head>
