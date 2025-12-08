@@ -4,7 +4,7 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const path = require('path'); // <-- 只有一個 'path' 宣告
+const path = require('path'); 
 
 // 2. 初始化 Express 應用程式和 HTTP 伺服器
 const app = express();
@@ -20,7 +20,6 @@ let votes = {
 let voteHistory = {}; // 記錄誰投了票: { '朋友名字': 'optionA' }
 
 // 4. 設定靜態檔案路徑：讓伺服器可以提供前端 HTML 檔案
-// 'public' 資料夾將會包含我們的 HTML、CSS 和 JavaScript
 app.use(express.static('public')); 
 
 // 處理根路徑請求，返回 index.html
@@ -37,10 +36,10 @@ io.on('connection', (socket) => {
         socket.username = username; 
     });
         
-    console.log('一個Gay進來了。'); // 修正：使用中性用語
+    console.log('一位使用者連線。'); // 修正：使用中性用語
 
-    // 【新增】監聽 'reset_votes' 事件
-    socket.on('投了_votes', () => {
+    // 【修正點】：將事件名稱從 '投了_votes' 改為 'reset_votes'
+    socket.on('reset_votes', () => { 
         // 重設投票資料
         votes = {
             optionA: 0,
@@ -84,12 +83,12 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log('一個Gay跑了。'); 
+        console.log('一位使用者斷線。'); // 修正：使用中性用語
     });
 });
 
 // 6. 啟動伺服器
-// 【修正】使用環境變數 PORT，適應 Render 部署
+// 使用環境變數 PORT，適應 Render 部署
 const PORT = process.env.PORT || 3000; 
 server.listen(PORT, () => {
     console.log(`伺服器運行在 Port: ${PORT}`);
